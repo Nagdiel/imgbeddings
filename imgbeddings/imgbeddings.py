@@ -4,7 +4,7 @@ import random
 import itertools
 
 from transformers import CLIPProcessor
-from huggingface_hub import hf_hub_url, cached_download
+from huggingface_hub import hf_hub_url, hf_hub_download
 from onnxruntime import InferenceSession
 import numpy as np
 from tqdm.auto import tqdm
@@ -35,11 +35,8 @@ class imgbeddings:
         if self.model_path is None:
             model_filename = f"patch{self.patch_size}_v{self.version}.onnx"
 
-            config_file_url = hf_hub_url(
+            self.model_path = hf_hub_download(
                 repo_id="minimaxir/imgbeddings", filename=model_filename
-            )
-            self.model_path = cached_download(
-                config_file_url, force_filename=model_filename
             )
 
         self.session = create_session_for_provider(
